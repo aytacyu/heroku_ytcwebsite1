@@ -3,5 +3,26 @@
 <div class="dictionary">
     <h1>My dictionary</h1>
     <p>This is the dictionary</p>
+
+    <form action = "" method = "POST">
+    <p>Enter your word : <input type = "text" name = "word" /></p>
+    <p><input type = "submit" value = "submit" /></p>
+    </form>
+
+
+    {% if word %}
+      <p><strong>Word:</strong> {{ word }}
+    {% endif %}
+    {% if replace %}
+      <form action = "" method = "POST">
+      <p><strong>Did you mean {{ replace }} instead? Enter Y if yes, or N if no: </strong>
+      <input type = "submit" name = "yn" value="Yes" />
+      <input type = "submit" name="yn" value = "No" />
+      </form>
+
+    {% endif %}
+    {% if mean %}
+      <p><strong>Meaning:</strong> {{ mean }}
+    {% endif %}
 </div>
 {% endblock %}
