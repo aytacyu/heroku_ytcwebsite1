@@ -14,10 +14,16 @@
       <p><strong>Word:</strong> {{ word }}
     {% endif %}
     {% if replace %}
+    <p><strong>Did you mean {{ replace }} instead? Enter Y if yes, or N if no: </strong>
       <form action = "" method = "POST">
-      <p><strong>Did you mean {{ replace }} instead? Enter Y if yes, or N if no: </strong>
-      <input type = "submit" name = "yn" value="Yes" />
-      <input type = "submit" name="yn" value = "No" />
+      <input type = "hidden" name = "yn" value="Yes" />
+      <input type = "hidden" name = "word" value="{{replace}}" />
+      <button type = "submit"/>YES<button>
+      </form>
+
+      <form action = "" method = "POST">
+      <input type = "hidden" name = "yn" value="No" />
+      <button type = "submit"/>NO<button>
       </form>
 
     {% endif %}

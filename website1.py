@@ -20,7 +20,7 @@ def dictionary():
         try :
             yn=result["yn"]
             if yn=="Yes":
-                word=replace
+                word=result["word"]
             elif yn=="No":
                 word=""
         except:
