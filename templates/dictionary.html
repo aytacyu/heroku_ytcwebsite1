@@ -1,34 +1,30 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="dictionary">
-    <h1>My dictionary</h1>
-    <p>This is the dictionary v1.2</p>
-
+    <h1>My dictionary
+    <form style="display:inline-block" action = "" method = "POST">
+    <input type = "submit" name = "action" value = "Add/Remove" /></p>
+    </form></h1>
     <form action = "" method = "POST">
-    <p>Enter your word : <input type = "text" name = "word" /></p>
-    <p><input type = "submit" value = "submit" /></p>
+    Enter your word to check: <input type = "text" name = "data" />
+    <input type = "submit" name = "action" value = "Check" />
     </form>
 
-
-    {% if word %}
-      <p><strong>Word:</strong> {{ word }}
+    {% if word_found %}
+    <p><strong>{{ word }} :</strong></p>
     {% endif %}
-    {% if replace %}
-    <p><strong>Did you mean {{ replace }} instead? Enter Y if yes, or N if no: </strong>
-      <form action = "" method = "POST">
-      <input type = "hidden" name = "yn" value="Yes" />
-      <input type = "hidden" name = "word" value="{{replace}}" />
-      <button type = "submit"/>YES</button>
-      </form>
-      <p></p>
-      <form action = "" method = "POST">
-      <input type = "hidden" name = "yn" value="No" />
-      <button type = "submit"/>NO</button>
-      </form>
 
+    {% if match_found %}
+    Did you mean <strong>{{ word }}</strong> instead?
     {% endif %}
+
     {% if mean %}
-      <p><strong>Meaning:</strong> {{ mean }}
+    <p><strong>Meaning : </strong>{{ mean }}</p>
     {% endif %}
+
+    <form action = "" method = "POST">
+    <p>Tell me a random word:<input type = "submit" name = "action" value = "TELL" /></p>
+    </form>
+
 </div>
 {% endblock %}

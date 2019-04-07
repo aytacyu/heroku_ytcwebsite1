@@ -1,6 +1,7 @@
 from flask import Flask,render_template,request
 import json
 from difflib import get_close_matches
+from random import choice
 
 app=Flask(__name__)
 
@@ -14,46 +15,68 @@ def about():
 
 @app.route("/dictionary/", methods=['POST','GET'])
 def dictionary():
+    with open("data.json","r") as json_file:
+        data = json.load(json_file)
     if request.method == 'POST':
-        print("***")
-        result = request.form
-        try :
-            yn=result["yn"]
-            if yn=="Yes":
-                word=result["word"]
-            elif yn=="No":
-                word=""
-        except:
-            yn=None
-            word=result["word"]
-        replace=None
-        print(result)
-        print(word)
-        word = word.lower()
-        data = json.load(open("data.json"))
-        if word in data:
-            mean=data[word]
-        elif word.title() in data:
-            mean=data[word.title()]
-        elif word.upper() in data:
-            mean=data[word.upper()]
-        elif len(get_close_matches(word, data.keys())) > 0:
-            replace=get_close_matches(word, data.keys())[0]
-            #error="Did you mean %s instead? Enter Y if yes, or N if no: " %replaced
-            mean=""
-        else :
-            mean="The word doesn't exist. Please double check it."
-        """
-            if yn.lower() == "y":
-                return data[get_close_matches(w, data.keys())[0]]
-            elif yn.lower() == "n":
-                return "The word doesn't exist. Please double check it."
+        if request.form['action'] == 'Check':
+            word = request.form["data"].lower()
+            word_found = 0
+            match_found =0
+            if word in data:
+                mean = data[word]
+                word_found =1
+            elif len(get_close_matches(word, data.keys())) > 0:
+                word = get_close_matches(word, data.keys())[0]
+                mean = data[word]
+                match_found = 1
+            else :
+                mean="The word doesn't exist. Please double check it."
+            return render_template("dictionary.html",word=word,mean=mean,word_found=word_found,match_found=match_found)
+        elif request.form['action'] == 'TELL':
+            word = choice(list(data.keys()))
+            mean = data[word]
+            word_found = 1
+            return render_template("dictionary.html",word=word,mean=mean,word_found=word_found)
+        elif request.form['action'] == 'Add/Remove':
+             return render_template("change.html")
+        elif request.form['action'] == "Add":
+            word = request.form["data"]
+            exists = 0
+            mean = ""
+            if word in data:
+                mean = data[word]
+                exists = 1
+            return render_template("add.html",add_word=word,exists=exists,mean=mean)
+
+        elif request.form['action'] == "Add_Meaning":
+            word = request.form["word"]
+            meaning = request.form["data"]
+            if word in data:
+                data[word].append(meaning)
             else:
-                return "We didn't understand your entry."
-        """
-        print(word,mean,replace)
-        return render_template("dictionary.html",word=word,mean=mean,replace=replace)
-    return render_template("dictionary.html",)
+                mean_list = [meaning]
+                data[word] = mean_list
+            with open('data.json', 'w') as json_file:
+                json_file.write(json.dumps(data, indent=4, sort_keys=True))
+            return render_template("dictionary.html")
+        elif request.form['action'] == "Remove":
+            word = request.form["data"]
+            if word in data:
+                remove_mean = data[word][-1]
+                if len(data[word]) > 1:
+                    data[word].pop()
+                    mean = data[word]
+                else:
+                    data.pop(word)
+                    mean = ""
+                with open('data.json', 'w') as json_file:
+                    json_file.write(json.dumps(data, indent=4, sort_keys=True))
+                return render_template("remove.html",remove_word=word,remove_mean=remove_mean,mean=mean)
+            else:
+                return render_template("change.html",not_found=word)
+        elif request.form['action'] == "Remove_Meaning":
+            return render_template("dictionary.html")
+    return render_template("dictionary.html")
 
 
 if __name__=="__main__":
