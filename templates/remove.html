@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="dictionary">
+    <h1>My dictionary</h1>
+    <p>Deleted:<strong> {{ remove_word }} : {{ remove_mean }}</strong></p>
+    <form action="" method="POST" id="form_remove">
+    <button type="submit" name="action" value="Remove_Meaning">Ok</button>
+    </form>
+    {% if mean %}
+    <p><strong>{{ remove_word }}</strong> exists with meaning : {{ mean }}</p>
+    {% endif %}
+</div>
+{% endblock %}

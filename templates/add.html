@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="dictionary">
+    <h1>My dictionary</h1>
+    <p>Word to be added:<strong> {{ add_word }}</strong></p>
+    <form action="" method="POST" id="form_meaning">
+    Enter meaning: <input type = "text" name = "data" />
+        <input type = "hidden" name = "word" value="{{add_word}}" />
+    <button type="submit" name="action" value="Add_Meaning">Add</button>
+    </form>
+    {% if exists %}
+    <p><strong>{{ add_word }}</strong> exists with meaning : {{ mean }}</p>
+    {% endif %}
+</div>
+{% endblock %}

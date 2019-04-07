@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="dictionary">
+    <h1>My dictionary</h1>
+    <form action="" method="POST" id="form_word">
+    Enter your word to change: <input type = "text" name = "data" />
+    <button type="submit" name="action" value="Add">Add</button>
+    <button type="submit" name="action" value="Remove">Remove</button>
+    </form>
+    <p></p>
+    Be careful while Removing!!!
+
+    {% if not_found %}
+      <p><strong>{{ check_word }}</strong> not found.
+    {% endif %}
+
+
+</div>
+{% endblock %}
